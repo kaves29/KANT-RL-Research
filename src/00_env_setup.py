@@ -22,6 +22,5 @@ device = torch.device("mps" if torch.backends.mps.is_available() else "cpu")
 print(f"Device: {device}")
 print(f"Gym Version: {gym.__version__}")
 print(f"SB3 Version: {__version__}")
-print(f"Pytorch Version: {torch.version}")
-print(f"Kan Version: {kan.__version__}")
+print(f"Pytorch Version: {torch.__version__}")
 
