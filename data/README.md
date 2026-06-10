@@ -1,1 +1,1 @@
-This folder contains raw experimental data from all 20 training runs
+This folder contains raw experimental data from all main experiments and pilot experiments

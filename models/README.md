@@ -1,0 +1,1 @@
+This folder contains all of the trained KAN & MLP models from all pilot experiments and main experiments
