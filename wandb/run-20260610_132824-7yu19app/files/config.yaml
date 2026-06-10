@@ -1,0 +1,189 @@
+_current_progress_remaining:
+    value: 1
+_custom_logger:
+    value: "False"
+_episode_num:
+    value: 0
+_last_episode_starts:
+    value: '[ True  True  True  True]'
+_last_obs:
+    value: |-
+        [[ 1.25487277e+00 -1.81289162e-03  2.88548936e-03  3.69896512e-03
+          -1.08915193e-03 -6.21181269e-04 -1.27251097e-03 -3.93046404e-03
+          -2.10345458e-04 -2.58647855e-03 -2.42854751e-03]
+         [ 1.24786817e+00  1.03148150e-03  2.77534083e-03  2.16074630e-03
+           4.15380120e-03  3.60393649e-03  4.18237629e-03 -4.73412266e-03
+          -6.27519999e-04 -1.50556730e-04 -4.34845803e-03]
+         [ 1.24707682e+00  3.28444885e-03 -3.50717877e-03  1.28046164e-04
+          -3.64080396e-03  1.89036480e-03  3.41747724e-03 -7.44910026e-04
+           4.56926003e-03  3.25332906e-03 -1.61784688e-03]
+         [ 1.24999278e+00  1.01498358e-03 -4.71310992e-03 -3.52073915e-03
+           4.28211023e-03 -4.29579424e-03 -3.70226051e-03  4.48328453e-03
+           1.21883593e-03 -1.31006876e-03  1.13900218e-04]]
+_last_original_obs:
+    value: None
+_logger:
+    value: <stable_baselines3.common.logger.Logger object at 0x135071a50>
+_n_updates:
+    value: 0
+_num_timesteps_at_start:
+    value: 0
+_stats_window_size:
+    value: 100
+_total_timesteps:
+    value: 1000000
+_vec_normalize_env:
+    value: None
+_wandb:
+    value:
+        cli_version: 0.27.2
+        code_path: code/src/01_mlp_hopper.py
+        e:
+            hg64r9rmf2zuc05m9lo95b9s5vv5c95h:
+                apple:
+                    ecpuCores: 6
+                    gpuCores: 10
+                    macModel: Mac16,1
+                    memoryGb: 16
+                    name: Apple M4
+                    pcpuCores: 4
+                    ramTotalBytes: "17179869184"
+                codePath: src/01_mlp_hopper.py
+                codePathLocal: src/01_mlp_hopper.py
+                cpu_count: 10
+                cpu_count_logical: 10
+                disk:
+                    /:
+                        total: "494384795648"
+                        used: "109685014528"
+                email: shourya23.kaveti@gmail.com
+                executable: /Users/shouryakaveti/VS_Projects/kan-vs-mlp-rl-research/.venv/bin/python3
+                git:
+                    commit: f88d1495c2a49ad62fd082bf2b1cd2b54d3ea9dc
+                    remote: https://github.com/kaves29/kan-vs-mlp-rl-research.git
+                host: Shouryas-MacBook-Pro.local
+                memory:
+                    total: "17179869184"
+                os: macOS-26.5.1-arm64-arm-64bit-Mach-O
+                program: /Users/shouryakaveti/VS_Projects/kan-vs-mlp-rl-research/src/01_mlp_hopper.py
+                python: CPython 3.13.7
+                root: /Users/shouryakaveti/VS_Projects/kan-vs-mlp-rl-research
+                startedAt: "2026-06-10T17:28:24.784579Z"
+                writerId: hg64r9rmf2zuc05m9lo95b9s5vv5c95h
+        m: []
+        python_version: 3.13.7
+        t:
+            "1":
+                - 1
+            "2":
+                - 1
+            "3":
+                - 2
+                - 13
+                - 22
+                - 34
+                - 35
+                - 41
+            "4": 3.13.7
+            "5": 0.27.2
+            "12": 0.27.2
+            "13": darwin-arm64
+action_noise:
+    value: None
+action_space:
+    value: Box(-1.0, 1.0, (3,), float32)
+algo:
+    value: PPO
+batch_size:
+    value: 64
+clip_range:
+    value: FloatSchedule(ConstantSchedule(val=0.2))
+clip_range_vf:
+    value: None
+device:
+    value: cpu
+ent_coef:
+    value: 0
+env:
+    value: <stable_baselines3.common.vec_env.dummy_vec_env.DummyVecEnv object at 0x11b6aee50>
+ep_info_buffer:
+    value: deque([], maxlen=100)
+ep_success_buffer:
+    value: deque([], maxlen=100)
+gae_lambda:
+    value: 0.95
+gamma:
+    value: 0.99
+learning_rate:
+    value: 0.0003
+lr_schedule:
+    value: FloatSchedule(ConstantSchedule(val=0.0003))
+max_grad_norm:
+    value: 0.5
+n_envs:
+    value: 4
+n_epochs:
+    value: 10
+n_steps:
+    value: 2048
+normalize_advantage:
+    value: "True"
+num_timesteps:
+    value: 0
+observation_space:
+    value: Box(-inf, inf, (11,), float64)
+policy:
+    value: |-
+        ActorCriticPolicy(
+          (features_extractor): FlattenExtractor(
+            (flatten): Flatten(start_dim=1, end_dim=-1)
+          )
+          (pi_features_extractor): FlattenExtractor(
+            (flatten): Flatten(start_dim=1, end_dim=-1)
+          )
+          (vf_features_extractor): FlattenExtractor(
+            (flatten): Flatten(start_dim=1, end_dim=-1)
+          )
+          (mlp_extractor): MlpExtractor(
+            (policy_net): Sequential(
+              (0): Linear(in_features=11, out_features=64, bias=True)
+              (1): Tanh()
+              (2): Linear(in_features=64, out_features=64, bias=True)
+              (3): Tanh()
+            )
+            (value_net): Sequential(
+              (0): Linear(in_features=11, out_features=64, bias=True)
+              (1): Tanh()
+              (2): Linear(in_features=64, out_features=64, bias=True)
+              (3): Tanh()
+            )
+          )
+          (action_net): Linear(in_features=64, out_features=3, bias=True)
+          (value_net): Linear(in_features=64, out_features=1, bias=True)
+        )
+policy_class:
+    value: <class 'stable_baselines3.common.policies.ActorCriticPolicy'>
+policy_kwargs:
+    value: '{}'
+rollout_buffer:
+    value: <stable_baselines3.common.buffers.RolloutBuffer object at 0x123973e50>
+rollout_buffer_class:
+    value: <class 'stable_baselines3.common.buffers.RolloutBuffer'>
+rollout_buffer_kwargs:
+    value: '{}'
+sde_sample_freq:
+    value: -1
+seed:
+    value: 8
+start_time:
+    value: 1781112505453605000
+target_kl:
+    value: None
+tensorboard_log:
+    value: logs/seed_8
+use_sde:
+    value: "False"
+verbose:
+    value: 0
+vf_coef:
+    value: 0.5

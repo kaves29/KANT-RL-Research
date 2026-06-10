@@ -1,0 +1,27 @@
+diff --git a/wandb/debug-internal.log b/wandb/debug-internal.log
+index 66ed6d5..8e86978 120000
+--- a/wandb/debug-internal.log
++++ b/wandb/debug-internal.log
+@@ -1 +1 @@
+-run-20260610_090142-elfmh1yz/logs/debug-internal.log
+\ No newline at end of file
++run-20260610_124650-d3wsmo3e/logs/debug-internal.log
+\ No newline at end of file
+diff --git a/wandb/debug.log b/wandb/debug.log
+index b33e8a0..ed976fb 120000
+--- a/wandb/debug.log
++++ b/wandb/debug.log
+@@ -1 +1 @@
+-run-20260610_090142-elfmh1yz/logs/debug.log
+\ No newline at end of file
++run-20260610_124650-d3wsmo3e/logs/debug.log
+\ No newline at end of file
+diff --git a/wandb/latest-run b/wandb/latest-run
+index 56b5802..234c2c9 120000
+--- a/wandb/latest-run
++++ b/wandb/latest-run
+@@ -1 +1 @@
+-run-20260610_090142-elfmh1yz
+\ No newline at end of file
++run-20260610_124650-d3wsmo3e
+\ No newline at end of file
