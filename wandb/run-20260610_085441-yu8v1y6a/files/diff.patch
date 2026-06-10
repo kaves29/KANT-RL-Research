@@ -1,0 +1,48 @@
+diff --git a/src/01_mlp_hopper.py b/src/01_mlp_hopper.py
+index 8ca9b40..6d6ce7f 100644
+--- a/src/01_mlp_hopper.py
++++ b/src/01_mlp_hopper.py
+@@ -5,7 +5,7 @@ import gymnasium as gym
+ from stable_baselines3 import PPO
+ from stable_baselines3.common.env_util import make_vec_env
+ 
+-RAND_SEEDS = 1
++RAND_SEEDS = 10
+ for seed in range(RAND_SEEDS):
+     # setting manual seeds to ensure reproducability
+     torch.manual_seed(seed)
+@@ -26,7 +26,6 @@ for seed in range(RAND_SEEDS):
+ 
+     model_path = f"models/mlp_hopper/mlp_hopper_{seed}" # seed is included with each file name to create unique files
+     model.save(model_path)
+-    run.log_model(path=model_path, name=f"MLP_Hopper_seed_{seed}")
+ 
+     env.close()
+     run.finish() # closing wandb file to stop and finalize recorded data
+diff --git a/wandb/debug-internal.log b/wandb/debug-internal.log
+index 16d5851..afea208 120000
+--- a/wandb/debug-internal.log
++++ b/wandb/debug-internal.log
+@@ -1 +1 @@
+-run-20260609_220141-ch7dc74m/logs/debug-internal.log
+\ No newline at end of file
++run-20260610_085441-yu8v1y6a/logs/debug-internal.log
+\ No newline at end of file
+diff --git a/wandb/debug.log b/wandb/debug.log
+index 224f725..c1b2bab 120000
+--- a/wandb/debug.log
++++ b/wandb/debug.log
+@@ -1 +1 @@
+-run-20260609_220141-ch7dc74m/logs/debug.log
+\ No newline at end of file
++run-20260610_085441-yu8v1y6a/logs/debug.log
+\ No newline at end of file
+diff --git a/wandb/latest-run b/wandb/latest-run
+index eee7bb3..b7bff6f 120000
+--- a/wandb/latest-run
++++ b/wandb/latest-run
+@@ -1 +1 @@
+-run-20260609_220141-ch7dc74m
+\ No newline at end of file
++run-20260610_085441-yu8v1y6a
+\ No newline at end of file

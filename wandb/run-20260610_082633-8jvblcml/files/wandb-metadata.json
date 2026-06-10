@@ -1,0 +1,37 @@
+{
+  "os": "macOS-26.5.1-arm64-arm-64bit-Mach-O",
+  "python": "CPython 3.13.7",
+  "startedAt": "2026-06-10T12:26:33.918651Z",
+  "program": "/Users/shouryakaveti/VS_Projects/kan-vs-mlp-rl-research/src/01_mlp_hopper.py",
+  "codePath": "src/01_mlp_hopper.py",
+  "codePathLocal": "src/01_mlp_hopper.py",
+  "git": {
+    "remote": "https://github.com/kaves29/kan-vs-mlp-rl-research.git",
+    "commit": "99a6184b32a01adcfc16d36668ae081539ba12c5"
+  },
+  "email": "shourya23.kaveti@gmail.com",
+  "root": "/Users/shouryakaveti/VS_Projects/kan-vs-mlp-rl-research",
+  "host": "Shouryas-MacBook-Pro.local",
+  "executable": "/Library/Frameworks/Python.framework/Versions/3.13/bin/python3",
+  "cpu_count": 10,
+  "cpu_count_logical": 10,
+  "disk": {
+    "/": {
+      "total": "494384795648",
+      "used": "107230588928"
+    }
+  },
+  "memory": {
+    "total": "17179869184"
+  },
+  "apple": {
+    "name": "Apple M4",
+    "ecpuCores": 6,
+    "pcpuCores": 4,
+    "gpuCores": 10,
+    "memoryGb": 16,
+    "ramTotalBytes": "17179869184",
+    "macModel": "Mac16,1"
+  },
+  "writerId": "1osleb8po2pw456wpfxy6d83n03unoxq"
+}

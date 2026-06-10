@@ -1,0 +1,31 @@
+/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/gymnasium/envs/registration.py:512: DeprecationWarning: [33mWARN: The environment Hopper-v4 is out of date. You should consider upgrading to version `v5`.[0m
+  logger.deprecation(
+Traceback (most recent call last):
+  File "/Users/shouryakaveti/VS_Projects/kan-vs-mlp-rl-research/src/01_mlp_hopper.py", line 29, in <module>
+    run.log_model(path=model_path, name=f"MLP_Hopper_seed_{seed}")
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/wandb/sdk/wandb_run.py", line 329, in wrapper
+    return func(self, *args, **kwargs)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/wandb/sdk/wandb_run.py", line 387, in wrapper_fn
+    return func(self, *args, **kwargs)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/wandb/sdk/wandb_run.py", line 374, in wrapper
+    return func(self, *args, **kwargs)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/wandb/sdk/wandb_run.py", line 3503, in log_model
+    self._log_artifact(
+    ~~~~~~~~~~~~~~~~~~^
+        artifact_or_path=path, name=name, type="model", aliases=aliases
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/wandb/sdk/wandb_run.py", line 3338, in _log_artifact
+    artifact, aliases = self._prepare_artifact(
+                        ~~~~~~~~~~~~~~~~~~~~~~^
+        artifact_or_path, name, type, aliases
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/wandb/sdk/wandb_run.py", line 3455, in _prepare_artifact
+    raise ValueError(
+    ...<2 lines>...
+    )
+ValueError: path must be a file, directory or externalreference like s3://bucket/path
