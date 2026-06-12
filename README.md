@@ -22,7 +22,7 @@ KANs are highly flexible function approximators with no explicit structure for m
 ## Four Core Experiments:
 ### **Experiment 1: Causal Consistency of Functional KAN Topologies Across Random Seeds**
 
-**1A.** (Cross-seed consistency) Train KANs across 10 independent random seeds per environment. Extract surviving connections per seed using fomal sparsity score definition. Compute the consistency score through the fraction of seeds that share identical surviving connections. Run a permutation test against random subgraph overlap to prove consistency is statistically significantly higher than chance.
+**1A.** (Cross-seed consistency) Train KANs across 10 independent random seeds per environment. Extract surviving connections per seed using formal sparsity score definition. Compute the consistency score through the fraction of seeds that share identical surviving connections. Run a permutation test against random subgraph overlap to prove consistency is statistically significantly higher than chance.
 
 **1B.** (Load-Bearing Verification via Connection Ablation) Take trained KAN agents and systematically remove each surviving connection. Measure performance drop after the removal of surviving splines; conversely, remove non-surviving connections one at a time and confirm no performance drop. Produce ranked casual importance scores of each connection in the network which will be required for experiment 3. The process above will only be executed on 5 randomly sampled networks from each environment to lower computational costs.
 
@@ -31,7 +31,7 @@ KANs are highly flexible function approximators with no explicit structure for m
 
 ### **Experiment 2: Temporal Emergence and Phase Transition of Functional KAN Topology During PPO Training**
 
-Utilizing the same 10 random seeded KANs from each environement, we analyze the topological structure and reward through going back their training checkpoints. For every model, we should have saved checkpoints periodically every 100k timesteps or every N episodes. At each individual checkpoint we compute topology stability and use the `ruptures` library for change point detection for when topology stabilizes. Generate a topology stability curve and overlay it on top of a reward curve to test whether phase transition coincides with policy breakthrough when reward increases rapidly. Potentially measure metrics such as FLOPS. 
+Utilizing the same 10 random seeded KANs from each environement, we analyze the topological structure and reward through going back their training checkpoints. For every model, we should have saved checkpoints periodically every 100k timesteps or every N episodes. At each individual checkpoint we compute topology stability and use the ruptures library for change point detection for when topology stabilizes. Generate a topology stability curve and overlay it on top of a reward curve. Topology stability will increase during learning until it converges. We will investigate the timing of topology stabilization relative to reward improvement empirically. Potentially measure metrics such as FLOPS. 
 
 
 ### **Experiment 3: Cross-Architecture Transfer of Causal KAN Topology for MLP Initialization in Reinforcement Learning**
@@ -42,6 +42,7 @@ Utilizing the same 10 random seeded KANs from each environement, we analyze the 
 * Top 60% of surviving connections by causal importance
 * Top 80% of surviving connections by causal importance
 * Full topology
+
 For each threshold, initialize an MLP where only weights corresponding to transferred connections are active using binary connectivity mask, and randomly initialize weights in surviving positions. Train the model from scratch and measure learning speed defined as number of timesteps to reach a specific reward thresold, final performance at convergence, and AUC. Possibly run all through major perbutations to test generalization? 
 
 **3B.** Compare the performance of the KANT MLP to various different variants of MLPs (10 random seeds for each variant): 
@@ -80,8 +81,7 @@ Statistical tests: Paired t-tests between Approach 1 and Approach 2 at each thre
 - gymnasium + gymnasium[mujoco]
 - Stable Baselines 3 (PPO)
 - Weights & Biases (experiment tracking)
-- MacBook M4 Pro (primary training hardware)
-- Google Colab (backup GPU)
+- MacBook M4 Pro (running local experiments)
 - CodeCarbon (energy tracking)
 - calflops or torchprofile (FLOPs measurement)(TBD)
 
