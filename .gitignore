@@ -1,2 +1,11 @@
+.venv/
+logs/
+models/
+__pycache__/
+*.pyc
+.wandb/
+wandb/
 .DS_Store
-**/.DS_Store
+model/
+.idea/
+*.egg-info/

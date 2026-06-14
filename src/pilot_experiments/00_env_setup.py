@@ -14,9 +14,6 @@ from stable_baselines3.common.env_util import make_vec_env
 from stable_baselines3.common.monitor import Monitor
 from stable_baselines3.common.callbacks import EvalCallback, CheckpointCallback
 
-env_hopper = make_vec_env("Hopper-v4", n_envs=4)
-env_cheetah = make_vec_env("HalfCheetah-v4", n_envs=4)
-
 device = torch.device("mps" if torch.backends.mps.is_available() else "cpu")
 
 print(f"Device: {device}")
