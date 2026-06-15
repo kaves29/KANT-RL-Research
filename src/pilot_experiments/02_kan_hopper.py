@@ -1,16 +1,33 @@
+import os
+from typing import Callable, Dict, List, Optional, Tuple, Type, Union
+
 import wandb
 import torch
 from torch import nn
 from kan import KAN
 import numpy as np
 import gymnasium as gym
+
 from stable_baselines3 import PPO
 from stable_baselines3.common.env_util import make_vec_env
 from stable_baselines3.common.policies import ActorCriticPolicy
+from stable_baselines3 import __version__
 from wandb.integration.sb3 import WandbCallback
-from typing import Callable, Dict, List, Optional, Tuple, Type, Union
 
-device = "mps" if torch.backends.mps.is_available() else "cpu"
+# Configuration & Hardware Acceleration
+DEVICE = "mps" if torch.backends.mps.is_available() else "cpu"
+NUM_SEEDS = 10
+TOTAL_TIMESTEPS = 1000000
+NUM_ENVS = 4
+INPUT_DIMS = 11
+ENVIRONMENT_NAME = "Hopper-v4"
+LOG_DIR = f"/Users/shouryakaveti/VS_Projects/kan-vs-mlp-rl-research/logs/pilot_experiment_logs/kan_hopper_logs"
+MODEL_DIR = f"/Users/shouryakaveti/VS_Projects/kan-vs-mlp-rl-research/models/pilot_models/kan_hopper"
+
+os.makedirs(LOG_DIR, exist_ok=True)
+os.makedirs(MODEL_DIR, exist_ok=True)
+
+wandb.tensorboard.patch(root_logdir="logs/")
 
 class CustomKan(nn.Module):
     def __init__(
@@ -25,11 +42,11 @@ class CustomKan(nn.Module):
         self.latent_dim_vf = last_layer_dim_vf
         
         # Policy network
-        self.policy_net = KAN(width=[11, 64, 64]) # 11: Takes 11 dimensions from Hopper | 64 (middle): Outputs per hidden layer | 64 (last): Outputs for the entire network (must match last_layer_dim_pi)
+        self.policy_net = KAN(width=[INPUT_DIMS, 64, self.latent_dim_pi]) 
         self.policy_net.speed()
 
         # Value network
-        self.value_net = KAN(width=[11, 64, 64])
+        self.value_net = KAN(width=[INPUT_DIMS, 64, self.latent_dim_vf]) # Same dimensions as policy network
         self.value_net.speed()
 
     def forward(self, features: torch.Tensor) -> Tuple[torch.Tensor, torch.Tensor]:
@@ -67,8 +84,10 @@ class CustomKanActorCriticPolicy(ActorCriticPolicy):
     def _build_mlp_extractor(self) -> None:
         self.mlp_extractor = CustomKan(self.features_dim)
 
-RAND_SEEDS = 10
-for seed in range(RAND_SEEDS):
+print(f"Beginning Pilot Experiment on Device: {DEVICE}")
+print(f"Environment: {ENVIRONMENT_NAME} | Seeds: {NUM_SEEDS} \n")
+
+for seed in range(NUM_SEEDS):
     torch.manual_seed(seed)
     np.random.seed(seed)
 
@@ -77,18 +96,34 @@ for seed in range(RAND_SEEDS):
         group="KAN_Hopper_seeds",
         name=f"KAN_Hopper_seed_{seed}",
         sync_tensorboard=True, 
-        save_code=True
+        save_code=True,
+        config={
+            "environment": ENVIRONMENT_NAME,
+            "total_timesteps": TOTAL_TIMESTEPS,
+            "num_envs": NUM_ENVS,
+            "seed": seed,
+            "device": str(DEVICE),
+            "architecture": f"KAN [{INPUT_DIMS}, 64, 64]",
+            "torch_version": torch.__version__,
+            "pykan_version": "0.2.8",
+            "sb3_version": __version__
+        }
     )
 
-    env = make_vec_env("Hopper-v4", n_envs=4, seed=seed)
+    env = make_vec_env(ENVIRONMENT_NAME, n_envs=NUM_ENVS, seed=seed)
+    model = PPO(CustomKanActorCriticPolicy, env, verbose=0, tensorboard_log=f"{LOG_DIR}/kan_hopper_seed_{seed}", device=DEVICE)
 
-    model = PPO(CustomKanActorCriticPolicy, env, verbose=0, tensorboard_log=f"/Users/shouryakaveti/VS_Projects/kan-vs-mlp-rl-research/logs/pilot_experiment_logs/kan_hopper_logs/kan_hopper_seed_{seed}")
-    model.learn(total_timesteps=1000000, callback=WandbCallback())
+    try:
+        model.learn(total_timesteps=TOTAL_TIMESTEPS, callback=WandbCallback())
+        model.save(f"{MODEL_DIR}/kan_hopper_seed_{seed}")
 
-    model_path = f"/Users/shouryakaveti/VS_Projects/kan-vs-mlp-rl-research/models/pilot_models/kan_hopper/kan_hopper_seed_{seed}" # seed is included with each file name to create unique files
-    model.save(model_path)
+    except Exception as e:
+        print(f"CRITICAL: Code failure executing seed {seed}")
+        print(f"Error: {e}")
+    finally:
+        env.close()
+        run.finish() # closing wandb file to stop and finalize recorded data
 
-    env.close()
-    run.finish() # closing wandb file to stop and finalize recorded data
+print("All seeds executed successfully.")
 
     
