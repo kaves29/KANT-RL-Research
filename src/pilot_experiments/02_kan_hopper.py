@@ -14,10 +14,11 @@ from stable_baselines3.common.policies import ActorCriticPolicy
 from stable_baselines3 import __version__
 from wandb.integration.sb3 import WandbCallback
 
+
 # Configuration & Hardware Acceleration
 DEVICE = "mps" if torch.backends.mps.is_available() else "cpu"
 NUM_SEEDS = 10
-TOTAL_TIMESTEPS = 1000000
+TOTAL_TIMESTEPS = 100000
 NUM_ENVS = 4
 INPUT_DIMS = 11
 ENVIRONMENT_NAME = "Hopper-v4"
@@ -111,7 +112,9 @@ for seed in range(NUM_SEEDS):
     )
 
     env = make_vec_env(ENVIRONMENT_NAME, n_envs=NUM_ENVS, seed=seed)
-    model = PPO(CustomKanActorCriticPolicy, env, verbose=0, tensorboard_log=f"{LOG_DIR}/kan_hopper_seed_{seed}", device=DEVICE)
+    
+    model = PPO(CustomKanActorCriticPolicy, env, verbose=0, tensorboard_log=f"{LOG_DIR}/kan_hopper_seed_{seed}", device="cpu")
+    model.policy.to(torch.float32)
 
     try:
         model.learn(total_timesteps=TOTAL_TIMESTEPS, callback=WandbCallback())

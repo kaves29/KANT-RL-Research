@@ -9,10 +9,11 @@ from stable_baselines3.common.env_util import make_vec_env
 from stable_baselines3 import __version__
 from wandb.integration.sb3 import WandbCallback
 
+
 # Configuration & Hardware Acceleration
 DEVICE = "mps" if torch.backends.mps.is_available() else "cpu"
 NUM_SEEDS = 10
-TOTAL_TIMESTEPS = 1000000
+TOTAL_TIMESTEPS = 100000
 NUM_ENVS = 4
 ENVIRONMENT_NAME = "Hopper-v4"
 LOG_DIR = f"/Users/shouryakaveti/VS_Projects/kan-vs-mlp-rl-research/logs/pilot_experiment_logs/mlp_hopper_logs"
@@ -23,10 +24,17 @@ os.makedirs(MODEL_DIR, exist_ok=True)
 
 wandb.tensorboard.patch(root_logdir="logs/")
 
+print(f"Beginning Pilot Experiment on Device: {DEVICE}")
+print(f"Environment: {ENVIRONMENT_NAME} | Seeds: {NUM_SEEDS} \n")
+
 for seed in range(NUM_SEEDS):
     # setting manual seeds to ensure reproducability
     torch.manual_seed(seed)
-    np.random.seed(seed=seed)
+    np.random.seed(seed)
+
+    # Creating seed specific directories
+    seed_log_dir = f"{LOG_DIR}/mlp_hopper_seed_{seed}"
+    os.makedirs(seed_log_dir, exist_ok=True)
 
     # organizing results in wandb with seed identifier for reproducibility
     run = wandb.init(
@@ -49,7 +57,8 @@ for seed in range(NUM_SEEDS):
     )
 
     env = make_vec_env(ENVIRONMENT_NAME, n_envs=NUM_ENVS, seed=seed)
-    model = PPO("MlpPolicy", env, seed=seed, verbose=0, tensorboard_log=f"{LOG_DIR}/mlp_hopper_seed_{seed}", device=DEVICE)
+    
+    model = PPO("MlpPolicy", env, seed=seed, verbose=0, tensorboard_log=seed_log_dir, device="cpu")
     
     try:
         model.learn(total_timesteps=TOTAL_TIMESTEPS, callback=WandbCallback())

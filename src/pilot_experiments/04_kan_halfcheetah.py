@@ -5,8 +5,8 @@ import wandb
 import torch
 from torch import nn
 from kan import KAN
-import numpy as np
 import gymnasium as gym
+import numpy as np
 
 from stable_baselines3 import PPO
 from stable_baselines3.common.env_util import make_vec_env
@@ -17,7 +17,7 @@ from wandb.integration.sb3 import WandbCallback
 # Configuration & Hardware Acceleration
 DEVICE = "mps" if torch.backends.mps.is_available() else "cpu"
 NUM_SEEDS = 10
-TOTAL_TIMESTEPS = 1000000
+TOTAL_TIMESTEPS = 100000
 NUM_ENVS = 4
 INPUT_DIMS = 17
 ENVIRONMENT_NAME = "HalfCheetah-v4"

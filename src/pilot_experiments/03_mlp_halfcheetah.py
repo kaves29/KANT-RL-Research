@@ -1,8 +1,8 @@
 import os
 import wandb
 import torch
-import numpy as np
 import gymnasium as gym
+import numpy as np
 
 from stable_baselines3 import PPO
 from stable_baselines3.common.env_util import make_vec_env
@@ -11,7 +11,7 @@ from wandb.integration.sb3 import WandbCallback
 
 DEVICE = "mps" if torch.backends.mps.is_available() else "cpu"
 NUM_SEEDS = 10
-TOTAL_TIMESTEPS = 1000000
+TOTAL_TIMESTEPS = 100000
 NUM_ENVS = 4
 ENVIRONMENT_NAME = "HalfCheetah-v4"
 LOG_DIR = f"/Users/shouryakaveti/VS_Projects/kan-vs-mlp-rl-research/logs/pilot_experiment_logs/mlp_halfcheetah_logs"
@@ -25,7 +25,7 @@ wandb.tensorboard.patch(root_logdir="logs/")
 for seed in range(NUM_SEEDS):
     # setting manual seeds to ensure reproducability
     torch.manual_seed(seed)
-    np.random.seed(seed=seed)
+    np.random.seed(seed)
 
     # organizing results in wandb with seed identifier for reproducibility
     run = wandb.init(
@@ -48,7 +48,7 @@ for seed in range(NUM_SEEDS):
     )
 
     env = make_vec_env(ENVIRONMENT_NAME, n_envs=NUM_ENVS, seed=seed)
-    model = PPO("MlpPolicy", env, seed=seed, verbose=0, tensorboard_log=f"{LOG_DIR}/mlp_halfcheetah_seed_{seed}", device=DEVICE)
+    model = PPO("MlpPolicy", env, seed=seed, verbose=0, tensorboard_log=f"{LOG_DIR}/mlp_halfcheetah_seed_{seed}", device="cpu")
 
     try:
         model.learn(total_timesteps=TOTAL_TIMESTEPS, callback=WandbCallback())
