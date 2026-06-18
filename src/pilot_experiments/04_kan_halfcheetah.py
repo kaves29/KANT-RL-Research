@@ -108,7 +108,7 @@ for seed in range(NUM_SEEDS):
     )
 
     env = make_vec_env(ENVIRONMENT_NAME, n_envs=NUM_ENVS, seed=seed)
-    model = PPO(CustomKanActorCriticPolicy, env, verbose=0, tensorboard_log=f"{LOG_DIR}/kan_halfcheetah_seed_{seed}", device=DEVICE)
+    model = PPO(CustomKanActorCriticPolicy, env, verbose=0, tensorboard_log=f"{LOG_DIR}/kan_halfcheetah_seed_{seed}")
 
     try:
         model.learn(total_timesteps=TOTAL_TIMESTEPS, callback=WandbCallback())
