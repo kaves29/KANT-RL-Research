@@ -56,12 +56,12 @@ def compute_jaccard(seed_a, seed_b):
     intersection_count = 0
     union_count = 0
 
-    for mask_index in range(len(seed_a)):
-        if(seed_a[mask_index] == 1 and seed_b[mask_index] == 1):
+    for mask_idx in range(len(seed_a)):
+        if(seed_a[mask_idx] == 1 and seed_b[mask_idx] == 1):
             intersection_count += 1
             union_count += 1
 
-        if(seed_a[mask_index] == 1 or seed_b[mask_index] == 1):
+        if(seed_a[mask_idx] == 1 or seed_b[mask_idx] == 1):
             union_count += 1
     
     return intersection_count / union_count
@@ -69,8 +69,8 @@ def compute_jaccard(seed_a, seed_b):
 def sparsity_score(kan_mask):
     active_splines = 0
 
-    for mask in range(len(kan_mask)):
-        if(mask == 1):
+    for mask_idx in range(len(kan_mask)):
+        if(kan_mask[mask_idx] == 1):
             active_splines += 1
     
     return active_splines / len(kan_mask)
@@ -195,19 +195,23 @@ for seed in range(NUM_SEEDS):
     kan_topologies.append(seed_mask)
 
 jaccard_scores = []
-for seed_a_index in range(NUM_SEEDS):
-    for seed_b_index, seed_b in enumerate(seed_a_index + 1, NUM_SEEDS):
-        seed_a = kan_topologies[seed_a_index]
-        seed_b = kan_topologies[seed_b_index]
+for seed_a_idx in range(NUM_SEEDS):
+    for seed_b_idx in range(seed_a_idx + 1, NUM_SEEDS):
+        seed_a = kan_topologies[seed_a_idx]
+        seed_b = kan_topologies[seed_b_idx]
         comparison_result = [seed_a, seed_b, compute_jaccard(seed_a, seed_b)]
         jaccard_scores.append(comparison_result)
 
-mean_jaccard_score = statistics.mean(jaccard_scores)
+raw_jaccard_scores = []
+for jaccard_score_idx in range(len(jaccard_scores)):
+    raw_jaccard_scores.append(jaccard_scores[jaccard_score_idx][2])
+
+mean_jaccard_score = statistics.mean(raw_jaccard_scores)
 
 rand_mask_len = len(kan_topologies[0])
 rand_kan_topologies = []
-for mask in range(kan_topologies):
-    mask_sparsity_score = sparsity_score(mask)
+for mask_idx in range(len(kan_topologies)):
+    mask_sparsity_score = sparsity_score(kan_topologies[mask_idx])
 
     num_active_splines = round(mask_sparsity_score * rand_mask_len)
     num_inactive_splines = rand_mask_len - num_active_splines
@@ -217,25 +221,30 @@ for mask in range(kan_topologies):
     rand_kan_topologies.append(random_mask)
 
 rand_jaccard_scores = []
-for seed_index, seed_a in enumerate(rand_kan_topologies):
-    for seed_index + 1, seed_b in enumerate(rand_kan_topologies):
+for seed_a_idx in range(len(rand_kan_topologies)):
+    for seed_b_idx in range(seed_a_idx + 1, len(rand_kan_topologies)):
+        seed_a = rand_kan_topologies[seed_a_idx]
+        seed_b = rand_kan_topologies[seed_b_idx]
         comparison_result = [seed_a, seed_b, compute_jaccard(seed_a, seed_b)]
         rand_jaccard_scores.append(comparison_result)
 
+raw_rand_jaccard_scores = []
+for rand_jaccard_score_idx in range(len(rand_jaccard_scores)):
+    raw_rand_jaccard_scores.append(rand_jaccard_scores[rand_jaccard_score_idx][2])
 
-p_value = (rand_jaccard_scores >= mean_jaccard_score).sum() / len(rand_jaccard_scores)
+p_value = (np.array(raw_rand_jaccard_scores) >= mean_jaccard_score).sum() / len(rand_jaccard_scores)
 
 intersection_count = 0
 for position in range(len(kan_topologies[0])):
     ref_value = kan_topologies[0][position]
-    seeds_agree = True
+    all_seeds_agree = True
 
-    for seed_idx in range(kan_topologies):
+    for seed_idx in range(len(kan_topologies)):
         if(ref_value != kan_topologies[seed_idx][position]):
-            consistent = False
+            all_seeds_agree = False
             break
 
-    if(seeds_agree):
+    if(all_seeds_agree):
         intersection_count += 1
 
 print(f"JACCARD P-VALUE = {p_value}")
