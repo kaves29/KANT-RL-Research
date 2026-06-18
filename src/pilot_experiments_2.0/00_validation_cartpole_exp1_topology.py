@@ -172,10 +172,8 @@ print("All seeds executed successfully.")
 kan_topologies = []
 for seed in range(NUM_SEEDS):
     seed_mask = []
-    kan_model = torch.load(f"{MODEL_DIR}/kan_seed_{seed}")
-    """ Determine an eplison value where if the spline variance is below
-    eplison we 'prune' it with a binary mask by labeling it with a 0. If the 
-    eplison value is above the thresold we label it 1. """
+    agent = PPO.load(f"{MODEL_DIR}/kan_seed_{seed}")
+    kan_model = agent.policy.mlp_extractor.policy_net
     
     obs = get_cartpole_obs(num_samples=1000)
     obs_tensor = torch.tensor(obs)
@@ -183,7 +181,7 @@ for seed in range(NUM_SEEDS):
     output = kan_model(obs_tensor)
 
     for layer_idx, layer_tensor in enumerate(kan_model.edge_scores):
-        out_dims, in_dims = kan_model.shape
+        out_dims, in_dims = layer_tensor.shape
 
         for output_node in range(out_dims):
             for input_node in range(in_dims):
