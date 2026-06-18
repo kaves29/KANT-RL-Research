@@ -21,13 +21,13 @@ from wandb.integration.sb3 import WandbCallback
 
 DEVICE = "mps" if torch.backends.mps.is_available() else "cpu"
 NUM_SEEDS = 5
-TOTAL_TIMESTEPS = 50000
+TOTAL_TIMESTEPS = 75000
 NUM_ENVS = 4
 INPUT_DIMS = 4
-ENVIRONMENT_NAME = "CartPole-v1"
-LOG_DIR = f"logs/validation/cartpole_exp1a_kan"
-MODEL_DIR = f"models/validation/cartpole_exp1a_kan"
-EPSILON = 1e-4
+ENVIRONMENT_NAME = "InvertedPendulum-v5"
+LOG_DIR = f"logs/validation/pendulum_exp1a_kan"
+MODEL_DIR = f"models/validation/pendulum_exp1a_kan"
+EPSILON = 1e-2
 
 os.makedirs(LOG_DIR, exist_ok=True)
 os.makedirs(MODEL_DIR, exist_ok=True)
@@ -37,8 +37,8 @@ wandb.tensorboard.patch(root_logdir="logs/")
 
 # HELPER FUNCTIONS
 
-def get_cartpole_obs(num_samples=1000):
-    """Collect observation samples from CartPole environment."""
+def get_pendulum_obs(num_samples=1000):
+    """Collect observation samples from Inverted Pendulum environment."""
     env = gym.make(ENVIRONMENT_NAME)
     observations = []
 
@@ -148,15 +148,16 @@ class CustomKanActorCriticPolicy(ActorCriticPolicy):
         self.mlp_extractor = CustomKan(self.features_dim)
 
 
-# TRAINING KAN AGENTS (5 SEEDS)
+"""# TRAINING KAN AGENTS (5 SEEDS)
 
 for seed in range(NUM_SEEDS):
     torch.manual_seed(seed)
     np.random.seed(seed)
+    random.seed(seed)
 
     run = wandb.init(
         project="kant_rl_project",
-        group="Validation_Exp1A_KAN_CartPole_seeds",
+        group="Validation_Exp1A_KAN_InvertedPendulum_seeds",
         name=f"KAN_seed_{seed}",
         sync_tensorboard=True, 
         save_code=True,
@@ -192,7 +193,7 @@ for seed in range(NUM_SEEDS):
         run.finish()  # closing wandb file to stop and finalize recorded data
 
 print("All seeds executed successfully.")
-
+"""
 
 # TOPOLOGY EXTRACTION
 
@@ -204,8 +205,8 @@ for seed in range(NUM_SEEDS):
     kan_model = agent.policy.mlp_extractor.policy_net
     
     # Collect observations for sparsity analysis
-    obs = get_cartpole_obs(num_samples=1000)
-    obs_tensor = torch.tensor(obs)
+    obs = get_pendulum_obs(num_samples=1000)
+    obs_tensor = torch.tensor(obs, dtype=torch.float32)
     kan_model.save_act = True
     output = kan_model(obs_tensor)
 
@@ -251,6 +252,7 @@ rand_mask_len = len(kan_topologies[0])
 rand_kan_topologies = []
 
 for mask_idx in range(len(kan_topologies)):
+    random.seed(mask_idx)
     mask_sparsity_score = sparsity_score(kan_topologies[mask_idx])
 
     num_active_splines = round(mask_sparsity_score * rand_mask_len)
